@@ -1,0 +1,375 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+/* Style for the page layout */
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: rgb(25, 27, 31);
+  width: 100%;
+  color: rgb(223, 230, 230);
+  /*
+  padding: 0px 0px;
+  border: 0px; */
+}
+
+/* Style for the page header bar (with link to up page) */
+.page-header {
+  top: 0px;
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+  padding: 0px;
+  vertical-align: middle;
+  border: 0px;
+  border-bottom: 1px solid #4f4f4f;
+  color: rgb(223, 230, 230);
+  margin-bottom: 10px;
+}
+
+/* Style for the back button in the header bar */
+.back-button {
+  position: relative;
+  top: 0px;
+  left: 10px;
+  height: 100%;
+  width: 'auto';
+  max-width: 70%;
+  background-color: transparent;   /* transparent background color*/
+  border: none;
+  color: rgb(2230, 230, 230);
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: left; /* Align the text to the left */
+}
+.back-button:hover {
+  /* background-color: #0056b3; /* Darker blue for hover effect */
+  background-color: transparent;   /* transparent background color*/
+}
+
+
+
+/* Style for the page content */
+.page-content {
+  width: 100%;
+  height: fit-content;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  flex-grow: 1;
+}
+.page-content-title {
+  font-size: 24px;
+  margin: 0 0 20px 0;
+  color: rgb(255, 71, 88);
+}
+
+
+
+/* Style for card with images of the dashboard */
+.dashboard-card {
+  width: 150px;
+  padding: 10px;
+  background-color: rgb(43, 46, 51);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  cursor: pointer; /* Make it look clickable */
+  border-color: rgb(66, 70, 77); /* Lighten the border color */
+  border-width: 1px;
+  border-style: solid;
+}
+.dashboard-card-image {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.dashboard-card-title {
+  font-size: 16px;
+  margin: 10px 0;
+  color: white;
+}
+
+
+/* style for the expandable cards */
+.expandable-card {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: auto;
+  background-color: rgb(43, 46, 51) !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: rgb(66, 70, 77); /* Lighten the border color */
+  border-width: 1px;
+  border-style: solid;
+}
+.expandable-card-header {
+  display: flex;
+  background-color: rgb(43, 46, 51);
+  justify-content: space-between;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0);
+  padding-right: 10px !important;
+}
+.expandable-card-title {
+  cursor: pointer;
+  flex-grow: 1;
+  background-color: transparent;
+  color: rgb(223, 230, 230);
+}
+.expandable-card-header-menu-button {
+  color: rgb(223, 230, 230);
+  cursor: pointer;
+  background-color: rgba(0,0,0,0);
+  font-size: 1.5rem; /* Make the dots larger */
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  display: flex; /* Center dots vertically */
+  border-width: 0;
+  }
+  /* remove the default down arrow */
+.dropdown-toggle::after {
+  display:none !important;
+}
+.expandable-card-body {
+  display: none;
+  padding: 10px;
+  background-color: transparent;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-style: none;
+}
+/* Style for the gold/silver/bronze cards */
+.expandable-card-gold {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: auto;
+  background-color: rgb(238, 182, 104) !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: rgb(66, 70, 77); /* Lighten the border color */
+  border-width: 1px;
+  border-style: solid;
+}
+.expandable-card-silver {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: auto;
+  background-color: rgb(163, 163, 163) !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: rgb(66, 70, 77); /* Lighten the border color */
+  border-width: 1px;
+  border-style: solid;
+}
+.expandable-card-bronze {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: auto;
+  background-color: rgb(187, 118, 86) !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: rgb(66, 70, 77); /* Lighten the border color */
+  border-width: 1px;
+  border-style: solid;
+}
+
+
+/* Style for the form */
+.form-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: rgb(223, 230, 230);
+}
+.form-input {
+  width: 100%;
+  padding: 10px;
+  margin: 0 0 0 0;
+  border: 1px solid rgb(66, 70, 77);
+  border-radius: 5px;
+  background-color: rgb(43, 46, 51);
+  color: rgb(223, 230, 230);
+}
+.form-input-number-70 {
+  width: 70px;
+  border-color: transparent;
+  margin-left: 10px;
+  background-color: transparent;
+  color: rgb(223, 230, 230);
+}
+.form-input-datetime {
+  width: 150px;
+  border-color: transparent;
+  margin-left: 10px;
+  background-color: transparent;
+  color: rgb(223, 230, 230);
+}
+.form-input-duration {
+  width: 70px;
+  border-color: transparent;
+  margin-left: 10px;
+  background-color: transparent;
+  color: rgb(223, 230, 230);
+}
+
+
+/* Style for the settings drop-down button */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  right: 0px;
+  max-width: 20px;
+}
+.dropdown-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  background-color: rgb(25, 27, 31);
+  color: rgb(223, 230, 230);
+  border: 1px solid rgb(66, 70, 77);
+  box-shadow: 0px 8px 16px 0px rgba(246, 245, 245, 0.2);
+  z-index: 1;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+.dropdown-content button {
+  background-color: rgb(25, 27, 31);
+  color: rgb(223, 230, 230);
+  border: none;
+  padding: 12px 16px;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+
+.dropdown-content button:hover {
+  background-color: rgb(46, 50, 57);
+}
+
+
+/* Other (generics) */
+.text {
+  color: rgb(223, 230, 230);
+  font-weight: normal
+}
+
+.add-remove-button {
+  margin-left: 10px;
+  border-radius: 10px;
+  height: 20px;
+  width: 20px;
+  line-height: 20px;
+  background-color: rgb(43, 46, 51);
+  color: rgb(110, 114, 114);
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.top-right-add-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 10px;
+  height: 30px;
+  width: 100px;
+  line-height: 30px;
+  background-color: rgb(43, 46, 51);
+  color: rgb(110, 114, 114);
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+.edit-settings-image {
+  max-height: 300px;
+  margin-left: 10px;
+}
+.edit-settings-image-button {
+  position: relative;
+  top: 0px;
+  left: -30px;
+  vertical-align: top;  
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
+
+.sidebar-list-button {
+  background-color: transparent;
+  border: none;
+  color: rgb(223, 230, 230);
+  font-size: 16px;
+  cursor: pointer;
+  text-align: left;
+  padding: 10px;
+  width: 100%;
+}
+
+
