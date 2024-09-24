@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import React from 'react';
-import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom'; // switch to using HashRouter instead of BrowserRouter to ensure that your routing works correctly with GitHub Pages
 import LoginPage from './components/LoginPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import RegisterPage from './components/RegisterPage';
