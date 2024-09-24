@@ -23,6 +23,7 @@ function LoginPage() {
         navigate('/dashboard'); // Redirect to the dashboard
         } else {
         // Handle login failure
+        print('Response:', response);
         alert('Login failed: invalid credentials.');
       }
     } 
