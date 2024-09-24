@@ -9,6 +9,7 @@ function LoginPage() {
 
   const handleLogin = async () => {
     try {
+      alert(`${apiUrl}/api/login/`)
       const response = await fetch(`${apiUrl}/api/login/`, {
         method: 'POST',
         headers: {
