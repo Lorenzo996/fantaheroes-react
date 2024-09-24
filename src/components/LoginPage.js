@@ -9,7 +9,7 @@ function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(`${apiUrl}login/`, {
+      const response = await fetch(`${apiUrl}/api/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ function LoginPage() {
         navigate('/dashboard'); // Redirect to the dashboard
         } else {
         // Handle login failure
-        print('Response:', response);
+        console.log('Response:', response);
         alert('Login failed: invalid credentials.');
       }
     } 
