@@ -9,7 +9,7 @@ function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(`${apiUrl}api/login/`, {
+      const response = await fetch(`${apiUrl}login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,14 +24,14 @@ function LoginPage() {
         } else {
         // Handle login failure
         console.log('Response:', response);
-        alert(`${apiUrl}/api/login/`)
+        alert(`${apiUrl}login/`)
         alert('Login failed: invalid credentials.');
       }
     } 
     catch (error) {
       console.error('Error:', error);
       // display error message
-      alert(`${apiUrl}/api/login/`)
+      alert(`${apiUrl}login/`)
       alert(error);
     }
   };

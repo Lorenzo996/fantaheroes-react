@@ -28,7 +28,7 @@ function GameSettingsPage_General() {
     const handleDeleteGame = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${apiUrl}/api/games/${gameId}/delete/`, {
+            const response = await fetch(`${apiUrl}games/${gameId}/delete/`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ function GameSettingsPage_General() {
     const handleLeaveGame = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${apiUrl}/api/games/${gameId}/leave/`, {
+            const response = await fetch(`${apiUrl}games/${gameId}/leave/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ function GameSettingsPage_General() {
     const fetchGameRules = async () => {
     // try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${apiUrl}/api/games/${gameId}/`, {
+        const response = await fetch(`${apiUrl}games/${gameId}/`, {
             headers: {
               'Authorization': `Token ${token}`, // Send token in header
             },
@@ -108,7 +108,7 @@ function GameSettingsPage_General() {
     const setEditedGame = (value, key) => {
         // Send the updated value to the backend
         const token = localStorage.getItem('token');
-        fetch(`${apiUrl}/api/games/${gameId}/edit-settings/${key}/`, {
+        fetch(`${apiUrl}games/${gameId}/edit-settings/${key}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ function GameSettingsPage_General() {
             reader.onloadend = async (event) => {
                 formData.append('image', reader.result);  // Append the file to the FormData
                 try {
-                    const response = await fetch(`${apiUrl}/api/games/${gameId}/edit-settings/image/`, {
+                    const response = await fetch(`${apiUrl}games/${gameId}/edit-settings/image/`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Token ${localStorage.getItem('token')}`,

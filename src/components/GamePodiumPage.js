@@ -28,7 +28,7 @@ function GamePodiumPage() {
         }, [gameId]);
     const fetchGamePodium = async () => {
         // try {
-        const response = await fetch(`${apiUrl}/api/games/${gameId}/podium/`, {
+        const response = await fetch(`${apiUrl}games/${gameId}/podium/`, {
             headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
         });
         const data = await response.json();
