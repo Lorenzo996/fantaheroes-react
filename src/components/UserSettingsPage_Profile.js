@@ -21,7 +21,7 @@ function UserSettingsPage_Profile() {
     const setEditedUsername = async (newUsername) => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${apiUrl}edit-user/username/`, {
+            const response = await fetch(`${apiUrl}/edit-user/username/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function UserSettingsPage_Profile() {
 
     const fetchUserDetails = async () => {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${apiUrl}user-profile/`, {
+        const response = await fetch(`${apiUrl}/user-profile/`, {
             headers: {
                 'Authorization': `Token ${token}`,
             },
@@ -86,7 +86,7 @@ function UserSettingsPage_Profile() {
             reader.onloadend = async (event) => {
                 formData.append('profile_image', reader.result);  // Append the file to the FormData
                 try {
-                    const response = await fetch(`${apiUrl}edit-user/profile-image/`, {
+                    const response = await fetch(`${apiUrl}/edit-user/profile-image/`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Token ${localStorage.getItem('token')}`,

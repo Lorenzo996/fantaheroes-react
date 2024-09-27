@@ -26,7 +26,7 @@ function GameEventsPage() {
         }, [gameId]); // TODO: is it necessary to include gameId in the dependencies?
     const fetchGameEvents = async () => {
         // try {
-        const response = await fetch(`${apiUrl}games/${gameId}/events/`, {
+        const response = await fetch(`${apiUrl}/games/${gameId}/events/`, {
             headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
         });
         const data = await response.json();
@@ -48,7 +48,7 @@ function GameEventsPage() {
     // Handler for deleting an event
     const handleDelete = async (item) => {
         // try {
-            const response = await fetch(`${apiUrl}games/${gameId}/delete-event/${item.id}/`, {
+            const response = await fetch(`${apiUrl}/games/${gameId}/delete-event/${item.id}/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`,
