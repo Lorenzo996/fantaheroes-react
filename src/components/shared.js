@@ -103,3 +103,42 @@ export const renderPageHeader = (title, backPath, handleNavigate) => {
         </div>
     );
 }
+
+export const renderLoadingMask = () => {
+    return (
+        <div className="loading-mask">
+            <div className="loading-spinner"></div>
+        </div>
+    );
+}
+
+export const sendAPIrequest = async ( path, method, errorMsg, setLoading ) => {
+    setLoading(true); // Start loading before the request is sent
+    let headers = { 'Authorization': `Token ${localStorage.getItem('token')}` };
+    if (method === 'POST') {
+        headers['Content-Type'] = 'application/json';
+    }
+
+    try {
+        const response = await fetch(`${path}`, {
+            method: method,
+            headers: headers,
+        });
+
+        setLoading(false); // Stop loading once the response is received
+        await response.json()
+        console.log(response);
+        if (!response.ok) {
+            throw new Error(errorMsg);
+        }
+        
+        return response;
+
+    } catch (error) {
+        setLoading(false); // Stop loading on error
+
+        console.error('Error sending API request:', error);
+
+    }
+
+}

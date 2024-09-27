@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { renderLoadingMask } from './shared';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function LoginPage() {
+  const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    setLoading(true); // Set loading to true when login starts
     try {
       const response = await fetch(`${apiUrl}/login/`, {
         method: 'POST',
@@ -16,6 +19,7 @@ function LoginPage() {
         },
         body: JSON.stringify({ username, password }),
       });
+      setLoading(false); // Stop loading once the response is received
       if (response.ok) {
         // Handle successful login
         const data = await response.json(); // Parse JSON data from the response
@@ -29,10 +33,9 @@ function LoginPage() {
       }
     } 
     catch (error) {
+      setLoading(false); // Stop loading on error
       console.error('Error:', error);
-      // display error message
-      alert(`${apiUrl}/login/`)
-      alert(error);
+      alert('An error occurred during login.');
     }
   };
   
@@ -65,8 +68,8 @@ function LoginPage() {
           style={{ padding: '10px', margin: '10px', width: '200px' }}
         />
       </div>
-      <button onClick={handleLogin} style={{ padding: '10px 20px', margin: '10px' }}>
-        Login
+      <button onClick={handleLogin} disabled={loading} className="login-btn">
+        {loading ? 'Logging in...' : 'Login'} {/* Show "Logging in..." during loading */}
       </button>
       <div>
         <button onClick={handleForgotPassword} style={{ padding: '10px 20px', margin: '10px' }}>
@@ -76,6 +79,7 @@ function LoginPage() {
           Register
         </button>
       </div>
+      {loading && renderLoadingMask()} {/* Render loading mask */}
     </div>
   );
 }
