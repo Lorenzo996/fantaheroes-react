@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
+import { renderPageHeader } from './shared';
 
 function GameSettingsPage() {
     const { gameId } = useParams(); // Get game ID from URL
@@ -24,15 +25,13 @@ function GameSettingsPage() {
 
     return (
         <div className="page-layout">
-            {/* Page header */}
-            <div className="page-header">
-                <button className="back-button" onClick={() => handleNavigate(`/game/${gameId}`)}>
-                    &lt; Dashboard {/* Arrow icon for going back */}
-                </button>
-            </div>
-  
             {/* Main Content */}
             <div className="page-content">
+        
+                {/* Page header */}
+                {renderPageHeader("Dashboard", `/game/${gameId}`, handleNavigate)}
+
+                {/* Page title */}
                 <h1 className="page-content-title">Game Settings</h1>
                 <div className="row">
                     {subpages.map((subpage, index) => (

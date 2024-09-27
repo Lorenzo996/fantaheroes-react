@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Dropdown, ButtonGroup, Button, DropdownButton } from 'react-bootstrap';
+import { renderPageHeader } from './shared';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GameEventsPage() {
@@ -120,15 +122,13 @@ function GameEventsPage() {
     // Render the page
     return (
         <div className="page-layout">
-            {/* Page header */}
-            <div className="page-header">
-                <button className="back-button" onClick={() => handleNavigate(`/game/${gameId}`)}>
-                    &lt; Dashboard {/* Arrow icon for going back */}
-                </button>
-            </div>
-
-            {/* Main Content*/}
+            {/* Main Content */}
             <div className="page-content">
+        
+                {/* Page header */}
+                {renderPageHeader("Dashboard", `/game/${gameId}`, handleNavigate)}
+
+                {/* Page title */}
                 <h1 className="page-content-title">Events</h1>
 
                 {/* Add event button */}

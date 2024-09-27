@@ -4,6 +4,8 @@ import { Accordion, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { renderPageHeader } from './shared';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GameSettingsPage_General() {
@@ -177,16 +179,13 @@ function GameSettingsPage_General() {
     
     return (
         <div className="page-layout">
-            {/* Page header */}
-            <div className="page-header">
-                <button className="back-button" onClick={() => handleNavigate(`/game/${gameId}/settings`)}>
-                    &lt; Game settings {/* Arrow icon for going back */}
-                </button>
-            </div>
-
             {/* Main Content */}
-            
             <div className="page-content">
+        
+                {/* Page header */}
+                {renderPageHeader("Game settings", `/game/${gameId}/settings`, handleNavigate)}
+
+                {/* Page title */}
                 <h1 className="page-content-title">General</h1>
                 
                 {/* Game Properties Section */}

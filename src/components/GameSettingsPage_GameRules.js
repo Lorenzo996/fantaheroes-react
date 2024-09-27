@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
+import { renderPageHeader } from './shared';
+
 import { toggleCard, setEditedGameSettings, fetchGameSettings } from './shared';
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -50,15 +52,13 @@ function GameSettingsPage_Rules() {
     ];
     return (
         <div className="page-layout">
-            {/* Page header */}
-            <div className="page-header">
-                <button className="back-button" onClick={() => handleNavigate(`/game/${gameId}/settings`)}>
-                    &lt; Game settings {/* Arrow icon for going back */}
-                </button>
-            </div>
-
             {/* Main Content */}
             <div className="page-content">
+        
+                {/* Page header */}
+                {renderPageHeader("Game settings", `/game/${gameId}/settings`, handleNavigate)}
+
+                {/* Page title */}
                 <h1 className="page-content-title">Game Rules Settings</h1>
                 
                 {/* Challenges, bonu and malus section */}

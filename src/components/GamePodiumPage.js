@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
-import { toggleCard } from './shared';
+import { toggleCard, renderPageHeader } from './shared';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GamePodiumPage() {
@@ -76,15 +76,13 @@ function GamePodiumPage() {
     // Render the page
     return (
         <div className="page-layout">
-            {/* Page header */}
-            <div className="page-header">
-                <button className="back-button" onClick={() => handleNavigate(`/game/${gameId}`)}>
-                    &lt; Dashboard {/* Arrow icon for going back */}
-                </button>
-            </div>
-
-            {/* Main Content*/}
+            {/* Main Content */}
             <div className="page-content">
+        
+                {/* Page header */}
+                {renderPageHeader("Dashboard", `/game/${gameId}`, handleNavigate)}
+
+                {/* Page title */}
                 <h1 className="page-content-title">Podium </h1>
                 {/* Players list */}
                 {renderPodium()}

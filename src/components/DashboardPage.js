@@ -135,7 +135,7 @@ function DashboardPage() {
             alt="Profile"
             style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }}
           />
-          <span style={{overflow: 'hidden'}}>{username}</span> {/* Display the user's nickname */}
+          <span style={{overflow:'hidden', width:'100%'}}>{username}</span> {/* Display the user's nickname */}
           <button
             style={{
               position: 'relative',

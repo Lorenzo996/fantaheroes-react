@@ -375,9 +375,9 @@ function GameRulesPage() {
 
   return (
     <div className="page-layout">
-
       {/* Main Content */}
       <div className="page-content">
+        
         {/* Page header */}
         {renderPageHeader("Dashboard", `/game/${gameId}`, handleNavigate)}
 

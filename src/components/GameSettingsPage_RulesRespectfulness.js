@@ -1,6 +1,7 @@
 // GameSettingsPage_RulesRespectfulness.js
 import React, { useState } from 'react';
 import { Accordion, Card } from 'react-bootstrap';
+import { renderPageHeader } from './shared';
 
 function GameSettingsPage_RulesRespectfulness() {
     const [activeKey, setActiveKey] = useState('0');
