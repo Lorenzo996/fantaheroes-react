@@ -20,6 +20,7 @@ import GameSettingsPage_FantaCoins from './components/GameSettingsPage_FantaCoin
 import GameSettingsPage_Classification from './components/GameSettingsPage_Classification';
 import GameSettingsPage_Leagues from './components/GameSettingsPage_Leagues';
 import GameSettingsPage_RulesRespectfulness from './components/GameSettingsPage_RulesRespectfulness';
+import DashboardPage_GameRules from './components/DashboardPage_GameRules';
 import UserSettingsPage from './components/UserSettingsPage';
 import UserSettingsPage_Profile from './components/UserSettingsPage_Profile';
 
@@ -46,6 +47,7 @@ function App() {
         <Route path="/game/:gameId/settings/classification" element={<GameSettingsPage_Classification />} />
         <Route path="/game/:gameId/settings/leagues" element={<GameSettingsPage_Leagues />} />
         <Route path="/game/:gameId/settings/rules-respectfulness" element={<GameSettingsPage_RulesRespectfulness />} />
+        <Route path="/howitworks" element={<DashboardPage_GameRules />} />
         <Route path="/settings" element={<UserSettingsPage />} />
         <Route path="/settings/profile" element={<UserSettingsPage_Profile />} />
       </Routes>

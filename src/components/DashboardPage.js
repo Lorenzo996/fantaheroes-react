@@ -46,35 +46,39 @@ function DashboardPage() {
   // Function to create a new game
   const [newGameWindowShow, setNewGameWindowShow] = useState(false);
   const handleNewGame = async () => {
-    const confirmNewGame = window.confirm("Do you want to create a new game?");
-    if (confirmNewGame) {
-      try {
-        const token = localStorage.getItem('token'); // Get the token from local storage
-        const response = await fetch(`${apiUrl}/create_game/`, {
-          method: 'POST',
+
+    try {
+      const data = {
+        name: 'New Game', // Hardcoded game name
+        default_rules: 'Custom', // Hardcoded game rules
+      };
+      const response = await fetch(`${apiUrl}/create_game/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${localStorage.getItem('token')}`, // Send token in header
+        },
+      });
+      if (response.ok) {
+        const result = await response.json();
+
+        // Close the modal
+        setNewGameWindowShow(false);
+
+        // Optionally, fetch games again to show the new game
+        const updatedGames = await fetch(`${apiUrl}/games/`, {
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`, // Send token in header
+            'Authorization': `Token ${localStorage.getItem('token')}`,  // Attach the token in the request headers
           },
         });
-        if (response.ok) {
-          const result = await response.json();
-          alert('New game created successfully!');
-          // Optionally, fetch games again to show the new game
-          const updatedGames = await fetch(`${apiUrl}/games/`, {
-            headers: {
-              'Authorization': `Token ${token}`,  // Attach the token in the request headers
-            },
-          });
-          const data = await updatedGames.json();
-          setGames(data);
-        } else {
-          alert('Failed to create a new game. Bad response from the server: ' + response.status);
-        }
-      } catch (error) {
-        console.error('Error creating a new game:', error);
-        alert('Error creating a new game: ' + error);
+        const data = await updatedGames.json();
+        setGames(data);
+      } else {
+        alert('Failed to create a new game. Bad response from the server: ' + response.status);
       }
+    } catch (error) {
+      console.error('Error creating a new game:', error);
+      alert('Error creating a new game: ' + error);
     }
   };
 
@@ -167,7 +171,7 @@ function DashboardPage() {
             <button onClick={handleJoinGame} className="sidebar-list-button">Join Game</button>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <button onClick={() => alert('How it works')} className="sidebar-list-button">How it works</button>
+            <button onClick={() => navigate('/howitworks')} className="sidebar-list-button">How it works</button>
           </li>
           <li style={{ marginBottom: '10px' }}>
             <button onClick={() => navigate('/settings')} className="sidebar-list-button">Settings</button>
