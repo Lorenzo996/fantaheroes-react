@@ -44,6 +44,7 @@ function DashboardPage() {
   }, []);
 
   // Function to create a new game
+  const [newGameWindowShow, setNewGameWindowShow] = useState(false);
   const handleNewGame = async () => {
     const confirmNewGame = window.confirm("Do you want to create a new game?");
     if (confirmNewGame) {
@@ -103,6 +104,7 @@ function DashboardPage() {
   // Function to logout the user
   const handleLogout = () => {
     localStorage.removeItem('token'); // Remove the token from local storage
+    // TODO: call logout api
     navigate('/'); // Navigate to the login page
   };
 
@@ -115,6 +117,12 @@ function DashboardPage() {
   const handleGameClick = (gameId) => {
     navigate(`/game/${gameId}`); // Updated navigation
   };
+
+  // FOR DEBUGGING
+  useEffect(() => {
+    console.log("New Game Modal Visible:", newGameWindowShow);
+  }, [newGameWindowShow]);
+  
 
   return (
     <div className="page-layout" style={{flexDirection: 'row'}}>
@@ -153,8 +161,8 @@ function DashboardPage() {
         </div>
         <ul style={{ listStyle: 'none', padding: '0' }}>
         <li style={{ marginBottom: '10px' }}>
-            <button onClick={handleNewGame} className="sidebar-list-button">New Game</button>
-          </li>
+          <button onClick={() => { toggleSidebar(); setNewGameWindowShow(true) }} className="sidebar-list-button">New Game</button>
+        </li>
           <li style={{ marginBottom: '10px' }}>
             <button onClick={handleJoinGame} className="sidebar-list-button">Join Game</button>
           </li>
@@ -214,6 +222,31 @@ function DashboardPage() {
           ))}
         </div>
       </div>
+
+      {/* New Game Modal */}
+      <div className="loading-mask" 
+        style={{
+          display: newGameWindowShow ? 'block' : 'none',
+          }}>
+        <div className="modal-window">
+          <span className="close" onClick={() => setNewGameWindowShow(false)}>&times;</span>
+          <h2>Create a New Game</h2>
+          <p className="form-label">Game Name: 
+            <input type="text"className="form-input" placeholder="Enter game name" />
+          </p>
+          <p className="form-label">Game rules: 
+            <select className="form-input">
+              <option value="FantaWorking">Custom</option>
+              <option value="FantaParty">FantaParty</option>
+              <option value="FantaWeRoad">FantaWeRoad</option>
+              <option value="FantaCoding">FantaCoding</option>
+              <option value="FantaWorking">FantaWorking</option>
+            </select>
+          </p>
+          <button onClick={handleNewGame}>Create Game</button>
+        </div>
+      </div>
+
     </div>
   );
 }

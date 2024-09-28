@@ -112,7 +112,7 @@ export const renderLoadingMask = () => {
     );
 }
 
-export const sendAPIrequest = async ( path, method, errorMsg, setLoading ) => {
+export const sendAPIrequest = async (path, method, errorMsg, setLoading, data = null) => {
     setLoading(true); // Start loading before the request is sent
     let headers = { 'Authorization': `Token ${localStorage.getItem('token')}` };
     if (method === 'POST') {
@@ -123,16 +123,17 @@ export const sendAPIrequest = async ( path, method, errorMsg, setLoading ) => {
         const response = await fetch(`${path}`, {
             method: method,
             headers: headers,
+            body: data ? JSON.stringify(data) : null,
         });
 
         setLoading(false); // Stop loading once the response is received
-        await response.json()
-        console.log(response);
+        const responseData = await response.json();
+        console.log(responseData);
         if (!response.ok) {
             throw new Error(errorMsg);
         }
         
-        return response;
+        return responseData;
 
     } catch (error) {
         setLoading(false); // Stop loading on error
@@ -140,5 +141,4 @@ export const sendAPIrequest = async ( path, method, errorMsg, setLoading ) => {
         console.error('Error sending API request:', error);
 
     }
-
 }
