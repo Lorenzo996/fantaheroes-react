@@ -45,12 +45,14 @@ function DashboardPage() {
 
   // Function to create a new game
   const [newGameWindowShow, setNewGameWindowShow] = useState(false);
+  const [newGameName, setNewGameName] = useState('');
+  const [newGameDefaultRules, setNewGameDefaultRules] = useState('Custom');
   const handleNewGame = async () => {
 
     try {
       const data = {
-        name: 'New Game', // Hardcoded game name
-        default_rules: 'Custom', // Hardcoded game rules
+        name: newGameName, // Game name
+        default_rules: newGameDefaultRules, // Default rules
       };
       const response = await fetch(`${apiUrl}/create_game/`, {
         method: 'POST',
@@ -58,6 +60,7 @@ function DashboardPage() {
           'Content-Type': 'application/json',
           'Authorization': `Token ${localStorage.getItem('token')}`, // Send token in header
         },
+        body: JSON.stringify(data),
       });
       if (response.ok) {
         const result = await response.json();
@@ -122,11 +125,6 @@ function DashboardPage() {
     navigate(`/game/${gameId}`); // Updated navigation
   };
 
-  // FOR DEBUGGING
-  useEffect(() => {
-    console.log("New Game Modal Visible:", newGameWindowShow);
-  }, [newGameWindowShow]);
-  
 
   return (
     <div className="page-layout" style={{flexDirection: 'row'}}>
@@ -236,10 +234,10 @@ function DashboardPage() {
           <span className="close" onClick={() => setNewGameWindowShow(false)}>&times;</span>
           <h2>Create a New Game</h2>
           <p className="form-label">Game Name: 
-            <input type="text"className="form-input" placeholder="Enter game name" />
+            <input type="text" className="form-input" placeholder="Enter game name" onChange={(e) => setNewGameName(e.target.value)} value={newGameName} />
           </p>
           <p className="form-label">Game rules: 
-            <select className="form-input">
+            <select className="form-input" onChange={(e) => setNewGameDefaultRules(e.target.value)} value={newGameDefaultRules}>
               <option value="FantaWorking">Custom</option>
               <option value="FantaParty">FantaParty</option>
               <option value="FantaWeRoad">FantaWeRoad</option>
