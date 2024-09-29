@@ -98,7 +98,10 @@ export const renderPageHeader = (title, backPath, handleNavigate) => {
     return (
         <div className="page-header">
             <button className="back-button" onClick={() => handleNavigate(backPath)}>
-                &lt; {title} {/* Arrow icon for going back */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="white" className="bi bi-arrow-left" viewBox="0 0 18 18">
+                    <path fillRule="evenodd" d="M11.354 4.354a.5.5 0 0 1 0 .708L7.707 8l3.647 3.646a.5.5 0 0 1-0.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708 0z"/>
+                </svg>
+                <span className="text" style={{marginLeft:'10px'}}>{title}</span>
             </button>
         </div>
     );

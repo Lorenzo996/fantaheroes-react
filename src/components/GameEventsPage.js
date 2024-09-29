@@ -104,6 +104,15 @@ function GameEventsPage() {
                     <p className="text">{event.challenge_description}</p>
                     {/* Points */}
                     <p className="text">Points: {event.points}</p>
+
+                    {/* Notes (optional) */}
+                    {event.notes && <p className="text">Notes: {event.notes}</p>}
+
+                    {/* Image (optional) */}
+                    {event.image && <img src={event.image} alt="Event" className="expandable-card-image" />}
+                    {/* Date */}
+                    <p className="text">Date: {event.event_date}</p>
+
                 </Card.Body>
               </Card>
             );

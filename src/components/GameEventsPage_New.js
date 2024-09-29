@@ -3,6 +3,7 @@ import { Accordion, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { renderPageHeader } from './shared';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GameEventsPage_New() {
@@ -44,6 +45,8 @@ function GameEventsPage_New() {
     const [selectedMalus, setSelectedMalus] = useState('');
     const [addedMaluses, setAddedMaluses] = useState([]);
     const [points, setPoints] = useState(NaN);
+    const [eventNotes, setEventNotes] = useState('');
+    const [eventImage, setEventImage] = useState('');
 
     // Handlers for navigating to different sections
     const handleNavigate = (path) => {
@@ -77,7 +80,9 @@ function GameEventsPage_New() {
         // |_ event_date: Date and time of the event
         const player = game.players.find((player) => player.id === parseInt(selectedPlayer));
         const challenge = game.challenges.find((challenge) => challenge.id === parseInt(selectedChallenge));
-        const new_event = {
+
+
+        let new_event = {
             player_id: player.id,
             player_nickname: player.nickname,
             challenge_id: challenge.id,
@@ -96,8 +101,25 @@ function GameEventsPage_New() {
             malus_divider: addedMaluses.length > 0 ? addedMaluses.slice(0).map(malus => malus.divider) : null, // list of maluses divider
             points: points,
             event_date: "2024-aug-12 00:00:00",
+            notes: eventNotes,
+            image: eventImage,
         };
         
+        // Get the image as a base64 string
+        if (eventImage !== '') {
+            const imageInput = document.getElementById('imageInput');
+            const imageFile = imageInput.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setEventImage(e.target.result);
+            };
+            reader.onloadend = async (event) => {
+                new_event.image = event.target.result;
+            }
+            reader.readAsDataURL(await fetch(eventImage).then((r) => r.blob()))
+        }
+
+        console.log(new_event);
         // Send the new event to the backend
         const response = await fetch(`${apiUrl}/games/${gameId}/add-event/`, {
             method: 'POST',
@@ -204,21 +226,20 @@ function GameEventsPage_New() {
     // Render the page
     return (
         <div className="page-layout">
-            {/* Page header */}
-            <div className="page-header">
-                <button className="back-button" onClick={() => handleNavigate(`/game/${gameId}/events`)}>
-                    &lt; Events {/* Arrow icon for going back */}
-                </button>
-            </div>
-
-            {/* Main Content*/}
+            {/* Main Content */}
             <div className="page-content">
+        
+                {/* Page header */}
+                {renderPageHeader("Events", `/game/${gameId}/events`, handleNavigate)}
+
+                {/* Page title */}
                 <h1 className="page-content-title">New event</h1>
+
                 {/* Form to add a new event */}
                 <form>
                     {/* Players drop down */}
                     <label className="form-label">Player:</label>
-                        <select value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)}>
+                        <select className="form-input-select" value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)}>
                             <option value="" disabled>Select a player</option>
                             {game.players && game.players.map((player) => (
                                 <option key={`player-${player.id}`} value={player.id}>
@@ -230,7 +251,7 @@ function GameEventsPage_New() {
 
                     {/* Challenges drop down */}
                     <label className="form-label">Challenge:</label>
-                        <select value={selectedChallenge} onChange={handleChallengeChanged}>
+                        <select className="form-input-select" value={selectedChallenge} onChange={handleChallengeChanged}>
                             <option value="" disabled>Select a challenge</option>
                             {game.challenges && game.challenges.map((challenge) => (
                                 <option key={`challenge-${challenge.id}`} value={challenge.id}>
@@ -242,7 +263,7 @@ function GameEventsPage_New() {
 
                     {/* Bonus drop down with add button and list of added bonuses*/}
                     <label className="form-label">Bonus:</label>
-                        <select value={selectedBonus} onChange={(e) => setSelectedBonus(e.target.value)}>
+                        <select className="form-input-select" value={selectedBonus} onChange={(e) => setSelectedBonus(e.target.value)}>
                             <option value="" disabled>Select a bonus</option>
                             {bonuses && bonuses.map((bonus) => (
                                 <option key={`bonus-${bonus.id}`} value={bonus.id}>
@@ -267,7 +288,7 @@ function GameEventsPage_New() {
                         
                     {/* Malus drop down with add button and list of added maluses*/}
                     <label className="form-label">Malus:</label>
-                        <select value={selectedMalus} onChange={(e) => setSelectedMalus(e.target.value)}>
+                        <select className="form-input-select" value={selectedMalus} onChange={(e) => setSelectedMalus(e.target.value)}>
                             <option value="" disabled>Select a malus</option>
                             {maluses && maluses.map((malus) => (
                                 <option key={`malus-${malus.id}`} value={malus.id}>
@@ -290,10 +311,42 @@ function GameEventsPage_New() {
                         ))}
                     </ul>
 
+                    {/* Notes and attach image (optional) */}
+                    <label className="form-label">Notes:</label>
+                    <textarea className="form-input" placeholder="Enter notes here" value={eventNotes} onChange={(e) => setEventNotes(e.target.value)}></textarea>
+                    <br />
+                    <label className="form-label">Attach image:</label>
+                    {eventImage == "" ? (
+                        <input
+                            type="file"
+                            id="imageInput"
+                            accept="image/*"
+                            onChange={(e) => setEventImage(URL.createObjectURL(e.target.files[0]))}
+                        />
+                    ) : (
+                        <div>
+                            <img src={eventImage} className="edit-settings-image" onError={(e) => e.target.src = 'https://via.placeholder.com/150'} />
+                            <input
+                                type="file"
+                                id="imageInput"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={(e) => setEventImage(URL.createObjectURL(e.target.files[0]))}
+                            />
+                            <button className="edit-settings-image-button" onClick={() => setEventImage("")}>
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
+                    )}
+                    <br />
 
+                    {/* Submit button */}
                 </form>
+                <br />
+                <br />
+                
                 {/* Points */}
-                <p className="text">Points: {points}</p>
+                <p className="form-label">Points: <span className="text">{points}</span></p>
 
                 {/* Add event button */}
                 <button className="add-button" onClick={handleAddEvent}>

@@ -70,19 +70,14 @@
 /* Style for the back button in the header bar */
 .back-button {
   position: relative;
-  top: 0px;
-  left: 10px;
-  height: 100%;
-  width: 'auto';
-  max-width: 70%;
+  margin-bottom: 5px;
+  margin-right: 10px;
   background-color: transparent;   /* transparent background color*/
-  border: none;
   color: rgb(2230, 230, 230);
-  font-size: 14px;
-  border-radius: 5px;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-align: left; /* Align the text to the left */
+  vertical-align: middle;
 }
 .back-button:hover {
   /* background-color: #0056b3; /* Darker blue for hover effect */
@@ -225,6 +220,7 @@
   font-size: 14px;
   font-weight: bold;
   color: rgb(223, 230, 230);
+  margin-right: 10px;
 }
 .form-input {
   width: 100%;
@@ -256,7 +252,15 @@
   background-color: transparent;
   color: rgb(223, 230, 230);
 }
-
+.form-input-select {
+  width: fit-content;
+  padding: 10px;
+  margin: 0 0 0 0;
+  background-color: rgb(43, 46, 51);
+  border: none;
+  color: rgb(223, 230, 230);
+  
+}
 
 /* Style for the settings drop-down button */
 .dropdown {
@@ -314,15 +318,13 @@
   width: 20px;
   line-height: 20px;
   background-color: rgb(43, 46, 51);
-  color: rgb(110, 114, 114);
-  border: none;
+  color: rgb(223, 230, 230);
+  border: 1px solid rgb(66, 70, 77);
   cursor: pointer;
-  align-items: center;
   vertical-align: middle;
-  text-align: center;
   padding: 0px;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .top-right-add-button {
