@@ -33,7 +33,7 @@ function RegisterPage() {
         email: email,
         password: password,
       };
-      sendAPIrequest( `${apiUrl}/register/`, "POST", "Registration failed", setLoading, data); 
+      sendAPIrequest( `${apiUrl}register/`, "POST", "Registration failed", setLoading, data); 
 
       // Show confirmatio message to the user and reset
       setMessage(`Account created for ${username}. See your email for confirmation.`);
