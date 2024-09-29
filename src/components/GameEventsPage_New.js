@@ -24,7 +24,7 @@ function GameEventsPage_New() {
         }, [gameId]);
     const fetchGameRules = async () => {
     // try {
-        const response = await fetch(`${apiUrl}games/${gameId}/`, {
+        const response = await fetch(`${apiUrl}/games/${gameId}/`, {
             headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
         });
         const data = await response.json();
@@ -121,7 +121,7 @@ function GameEventsPage_New() {
 
         console.log(new_event);
         // Send the new event to the backend
-        const response = await fetch(`${apiUrl}games/${gameId}/add-event/`, {
+        const response = await fetch(`${apiUrl}/games/${gameId}/add-event/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

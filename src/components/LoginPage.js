@@ -14,7 +14,7 @@ function LoginPage() {
   const handleLogin = async () => {
     setLoading(true); // Set loading to true when login starts
     try {
-      const response = await fetch(`${apiUrl}login/`, {
+      const response = await fetch(`${apiUrl}/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ function LoginPage() {
         } else {
         // Handle login failure
         console.log('Response:', response);
-        alert(`${apiUrl}login/`)
+        alert(`${apiUrl}/login/`)
         alert('Login failed: invalid credentials.');
       }
     } 
