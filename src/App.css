@@ -141,13 +141,26 @@
   border-width: 1px;
   border-style: solid;
 }
+.expandable-card-transparent {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: auto;
+  background-color: transparent !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: rgb(66, 70, 77); /* Lighten the border color */
+  border-width: 1px;
+  border-style: solid;
+}
+
 .expandable-card-header {
   display: flex;
-  background-color: rgb(43, 46, 51);
+  background-color: transparent;
   justify-content: space-between;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0);
   padding-right: 10px !important;
+  font-weight: bold;
 }
 .expandable-card-title {
   cursor: pointer;
@@ -217,18 +230,30 @@
 
 /* Style for the form */
 .form-label {
+  width: fit-content;
+  height: 100%;
   font-size: 14px;
   font-weight: bold;
   color: rgb(223, 230, 230);
-  margin-right: 10px;
+  margin: 0 10px 0 0 !important;
+  text-wrap: nowrap;
 }
 .form-input {
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   margin: 0 0 0 0;
   border: 1px solid rgb(66, 70, 77);
   border-radius: 5px;
   background-color: rgb(43, 46, 51);
+  color: rgb(223, 230, 230);
+}
+.form-input-transparent {
+  width: fill;
+  padding: 5px;
+  margin: 0 0 0 0;
+  border-radius: 5px;
+  background-color: rgb(25, 27, 31);
+  border: none;
   color: rgb(223, 230, 230);
 }
 .form-input-number-70 {
