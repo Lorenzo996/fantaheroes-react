@@ -20,30 +20,35 @@ function RegisterPage() {
     navigate(path);
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setMessage('Passwords do not match');
-    } else {
-      // Send the registration data to the backend
-      const data = {
-        username: username,
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        password: password,
-      };
-      sendAPIrequest( `${apiUrl}register/`, "POST", "Registration failed", setLoading, data); 
-
-      // Show confirmatio message to the user and reset
-      setMessage(`Account created for ${username}. See your email for confirmation.`);
-      setUsername('');
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
+      alert('Passwords do not match');
+      return;
     }
+    // Send the registration data to the backend
+    const data = {
+      username: username,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      password: password,
+    };
+    const response_data = await sendAPIrequest( `${apiUrl}register/`, "POST-NO-AUTH", "Registration failed", setLoading, data); 
+    console.log("Response data:", response_data);
+    if (response_data === null) {
+      return;
+    }
+    
+
+    // Show confirmation message to the user and reset
+    setMessage(`Account created for ${username}. See your email for confirmation.`);
+    setUsername('');
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
   };
 
   return (

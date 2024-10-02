@@ -115,33 +115,73 @@ export const renderLoadingMask = () => {
     );
 }
 
-export const sendAPIrequest = async (path, method, errorMsg, setLoading, data = null) => {
+
+export const sendAPIrequest = async (path, method, errorMsg, setLoading, data) => {
     setLoading(true); // Start loading before the request is sent
     let headers = { 'Authorization': `Token ${localStorage.getItem('token')}` };
     if (method === 'POST') {
         headers['Content-Type'] = 'application/json';
+    } else if (method === 'POST-NO-AUTH') {
+        method = 'POST';
+        headers = { 'Content-Type': 'application/json' };
     }
-
+    // Send the API request and wait for the response
+    let response;
     try {
-        const response = await fetch(`${path}`, {
+        response = await fetch(`${path}`, {
             method: method,
             headers: headers,
             body: data ? JSON.stringify(data) : null,
         });
-
-        setLoading(false); // Stop loading once the response is received
-        const responseData = await response.json();
-        console.log(responseData);
-        if (!response.ok) {
-            throw new Error(errorMsg);
-        }
-        
-        return responseData;
-
     } catch (error) {
         setLoading(false); // Stop loading on error
-
+        alert(`${errorMsg}: ${error}`);
         console.error('Error sending API request:', error);
+        // raise error
+        // throw Error('Error sending API request');
+        return null;
+    }
 
+    // Check if the response is successful
+    const responseData = await response.json();
+    if (response.ok) {
+        // If the response is successful, parse the JSON data and return it
+        setLoading(false); // Stop loading once the response is received
+        return responseData;
+    } else {
+        setLoading(false); // Stop loading once the response is received
+        alert(`${errorMsg}: ${responseData.error}`);
+        //throw Error(`${errorMsg}: ${response.error}`);
+        return null;
     }
 }
+
+export const renderPage = (title, backPath, backPathTitle, handleNavigate, renderChildren) => {
+    return (
+        <div className="page-layout">
+            <div className="page-content">
+                {renderPageHeader(backPathTitle, backPath, handleNavigate)}
+                {renderChildren}
+            </div>
+        </div>
+    );
+}
+
+export const renderExpandableCard = (cardTitle, renderChildren) => {
+    const uniqueIndex = cardTitle.toLowerCase().replace(' ', '-');
+    return (
+        <Card key={uniqueIndex} className="expandable-card-transparent">
+            <Card.Header className="expandable-card-header">
+                <span onClick={() => toggleCard(uniqueIndex)} className="expandable-card-title" >
+                    {cardTitle}
+                </span>
+            </Card.Header>
+            <Card.Body id={`card-body-game-properties`} className="expandable-card-body">
+                {renderChildren}
+            </Card.Body>
+        </Card>
+    );
+}
+
+
+

@@ -4,7 +4,7 @@ import { Accordion, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { renderPageHeader } from './shared';
+import { renderPage, renderExpandableCard } from './shared';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -177,85 +177,69 @@ function GameSettingsPage_General() {
         }
     };
     
-    return (
-        <div className="page-layout">
-            {/* Main Content */}
-            <div className="page-content">
-        
-                {/* Page header */}
-                {renderPageHeader("Game settings", `/game/${gameId}/settings`, handleNavigate)}
+    const renderCardContent_GameProperties = () => {
+        return (
+            <>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                    <span className="form-label">Game Name </span>
+                    <input type="text" className="form-input-transparent" value={game.name || ''} onChange={(e) => setEditedGame(e.target.value, "name")}/>
+                </div>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                    <span className="form-label">Game Description</span>
+                    <input type="text" className="form-input-transparent" value={tempGame.description || ''} 
+                        onChange={(e) => (setTempEditedGame(e.target.value, "description"))} 
+                        onBlur={(e) => setEditedGame(e.target.value, "description")} // Trigger onBlur when the input loses focus
+                    />
+                </div>
+                <div className="form-label">Game Image</div>
+                <div>
+                    <img src={gameImage} className="edit-settings-image" onError={(e) => e.target.src = 'https://via.placeholder.com/150'} />
+                    <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={handleImageChange}
+                    />
+                    <button className="edit-settings-image-button" onClick={() => document.getElementById('imageInput').click()}>
+                        <i className="fas fa-edit"></i>
+                    </button>
+                </div>
 
-                {/* Page title */}
-                <h1 className="page-content-title">General</h1>
-                
-                {/* Game Properties Section */}
-                <Card key={'game-properties'} className="expandable-card">
-                    <Card.Header className="expandable-card-header">
-                        <span onClick={() => toggleCard('game-properties')} className="expandable-card-title" >
-                            Game properties
-                        </span>
-                    </Card.Header>
-                    <Card.Body id={`card-body-game-properties`} className="expandable-card-body">
-                        <div className="form-label">Game Name
-                            <input type="text" className="form-input" value={game.name || ''} onChange={(e) => setEditedGame(e.target.value, "name")}/>
-                        </div>
-                        <div className="form-label">Game Description
-                            <input type="text" className="form-input" value={tempGame.description || ''} 
-                            onChange={(e) => (setTempEditedGame(e.target.value, "description"))} 
-                            onBlur={(e) => setEditedGame(e.target.value, "description")} // Trigger onBlur when the input loses focus
-                            />
-                        </div>
-                        <div className="form-label">Game Image</div>
-                        <div>
-                            <img src={gameImage} className="edit-settings-image" onError={(e) => e.target.src = 'https://via.placeholder.com/150'} />
-                            <input
-                                type="file"
-                                id="imageInput"
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                                onChange={handleImageChange}
-                            />
-                            <button className="edit-settings-image-button" onClick={() => document.getElementById('imageInput').click()}>
-                                <i className="fas fa-edit"></i>
-                            </button>
-                        </div>
+                <div className="form-label">Invitation Code: <span className="text">{game.invitation_code}</span></div>
+            </>
+        );
+    };
+    const renderCardContent_GameTimeline = () => {
+        return (
+            <>
+                <div className="text">Activation Date
+                    <input type="date" className="form-control" value={game.activation_date || ''} onChange={(e) => setEditedGame(e.target.value, "activation_date")}/>
+                </div>
+                <div className="text">Termination Date
+                    <input type="date" className="form-control" value={game.termination_date || ''} onChange={(e) => setEditedGame(e.target.value, "termination_date")}/>
+                </div>
+            </>
+        );
+    };
+    const renderCardContent_Players = () => {
+        return (
+            <>
+                <div>Add Player</div>
+                <div>Remove Player</div>
+                <div>Disable Player</div>
+            </>
+        );
+    };
 
-                        <div className="form-label">Invitation Code: <span className="text">{game.invitation_code}</span></div>
-                    </Card.Body>
-                </Card>
+    const renderPageContent = () => {
+        return (
+            <>
+                {/* Game settings cards */}
+                {renderExpandableCard("Game properties", renderCardContent_GameProperties())}
+                {renderExpandableCard("Game Timeline", renderCardContent_GameTimeline())}
+                {renderExpandableCard("Players", renderCardContent_Players())}
 
-                {/* Game Timeline Section */}
-                <Card key={'game-timeline'} className="expandable-card">
-                    <Card.Header className="expandable-card-header">
-                        <span onClick={() => toggleCard('game-timeline')} className="expandable-card-title" >
-                            Game Timeline
-                        </span>
-                    </Card.Header>
-                    <Card.Body id={`card-body-game-timeline`} className="expandable-card-body">
-                        <div className="text">Activation Date
-                            <input type="date" className="form-control" value={game.activation_date || ''} onChange={(e) => setEditedGame(e.target.value, "activation_date")}/>
-                        </div>
-                        <div className="text">Termination Date
-                            <input type="date" className="form-control" value={game.termination_date || ''} onChange={(e) => setEditedGame(e.target.value, "termination_date")}/>
-                        </div>
-                    </Card.Body>
-                </Card>
-
-                {/* Players Section */}
-                <Card key={'players'} className="expandable-card">
-                    <Card.Header className="expandable-card-header">
-                        <span onClick={() => toggleCard('players')} className="expandable-card-title" >
-                            Players
-                        </span>
-                    </Card.Header>
-                    <Card.Body id={`card-body-players`} className="expandable-card-body">
-                        <div>Add Player</div>
-                        <div>Remove Player</div>
-                        <div>Disable Player</div>
-                    </Card.Body>
-                </Card>
-
-            
                 {/* Leave game button */}
                 <button className="btn btn-danger mt-3" onClick={() => handleLeaveGame()}>
                     Leave Game
@@ -264,8 +248,12 @@ function GameSettingsPage_General() {
                 <button className="btn btn-danger mt-3" onClick={() => handleDeleteGame()}>
                     Delete Game
                 </button>
-            </div>
-        </div>
+            </>
+        );
+    };
+
+    return (
+        renderPage("General", `/game/${gameId}/settings`, "Settings", handleNavigate, renderPageContent())
     );
 }
 
