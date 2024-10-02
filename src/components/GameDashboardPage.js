@@ -18,7 +18,7 @@ function GameDashboardPage() {
   const handleLeaveGame = async () => {
     const token = localStorage.getItem('token');
     try {
-        const response = await fetch(`${apiUrl}games/${gameId}/leave/`, {
+        const response = await fetch(`${apiUrl}/games/${gameId}/leave/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ function GameDashboardPage() {
 // Fetch user role from the backend
   const [userRole, setUserRole] = useState('');
   const fetch_user_role = async () => {
-    const response = await fetch(`${apiUrl}games/${gameId}/role/`, {
+    const response = await fetch(`${apiUrl}/games/${gameId}/role/`, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     });
     if (!response.ok) {
