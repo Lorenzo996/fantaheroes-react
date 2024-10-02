@@ -45,7 +45,7 @@ function GameRulesPage() {
     }, [gameId]);
   const fetchGameRules = async () => {
     // try {
-      const response = await fetch(`${apiUrl}/games/${gameId}/`, {
+      const response = await fetch(`${apiUrl}games/${gameId}/`, {
         headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
       });
       const data = await response.json();
@@ -271,9 +271,9 @@ function GameRulesPage() {
         updatedRule["divider"] = editedDivider;
       }
 
-      let url = `${apiUrl}/games/${gameId}/edit-${type}/${ruleId}/`;
+      let url = `${apiUrl}games/${gameId}/edit-${type}/${ruleId}/`;
       if (isNew === true) {
-        url = `${apiUrl}/games/${gameId}/add-${type}/`; // Use a different URL for new rules
+        url = `${apiUrl}games/${gameId}/add-${type}/`; // Use a different URL for new rules
       }
       const response = await fetch(url, {
         method: 'POST',
@@ -333,7 +333,7 @@ function GameRulesPage() {
   // Function for Delete functionality
   const handleDelete = async (item, type) => {
     // try {
-      const response = await fetch(`${apiUrl}/games/${gameId}/delete-${type}/${item["id"]}/`, {
+      const response = await fetch(`${apiUrl}games/${gameId}/delete-${type}/${item["id"]}/`, {
         method: 'POST',
         headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
       });

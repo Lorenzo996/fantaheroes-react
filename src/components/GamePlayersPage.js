@@ -28,7 +28,7 @@ function GamePlayersPage() {
         }, [gameId]);
     const fetchGamePlayers = async () => {
         // try {
-        const response = await fetch(`${apiUrl}/games/${gameId}/players/`, {
+        const response = await fetch(`${apiUrl}games/${gameId}/players/`, {
             headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
         });
         const data = await response.json();

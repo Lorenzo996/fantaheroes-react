@@ -34,7 +34,7 @@ function RegisterPage() {
       email: email,
       password: password,
     };
-    const response_data = await sendAPIrequest( `${apiUrl}/register/`, "POST-NO-AUTH", "Registration failed", setLoading, data); 
+    const response_data = await sendAPIrequest( `${apiUrl}register/`, "POST-NO-AUTH", "Registration failed", setLoading, data); 
     console.log("Response data:", response_data);
     if (response_data === null) {
       return;
