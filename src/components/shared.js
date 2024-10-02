@@ -115,13 +115,16 @@ export const renderLoadingMask = () => {
     );
 }
 
-export const sendAPIrequest = async (path, method, errorMsg, setLoading, data = null) => {
+
+export const sendAPIrequest = async (path, method, errorMsg, setLoading, data) => {
     setLoading(true); // Start loading before the request is sent
     let headers = { 'Authorization': `Token ${localStorage.getItem('token')}` };
     if (method === 'POST') {
         headers['Content-Type'] = 'application/json';
+    } else if (method === 'POST-NO-AUTH') {
+        method = 'POST';
+        headers = { 'Content-Type': 'application/json' };
     }
-    
     // Send the API request and wait for the response
     let response;
     try {
