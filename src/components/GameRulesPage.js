@@ -71,12 +71,13 @@ function GameRulesPage() {
       }
       return (
         <Card key={uniqueIndex} className="expandable-card">
-          <Card.Header className="expandable-card-header" >
+          <Card.Header className="expandable-card-header">
             {/* Title that can toggle the card body */}
             {isEditing ? (
               <input
                 type="text"
                 value={editedTitle}
+                placeholder='Title'
                 onChange={(e) => setEditedTitle(e.target.value)}
                 className="form-input"
                 style={{ flexGrow: 1 }}
@@ -151,11 +152,12 @@ function GameRulesPage() {
   
           </Card.Header>
   
-          <Card.Body id={`card-body-${uniqueIndex}`} className="expandable-card-body">
+          <Card.Body id={`card-body-${uniqueIndex}`} className="expandable-card-body" style={isNew ? { display: 'block' } : {}}>
             {/* Description */}
             {isEditing ? (
               <textarea
                 value={editedDescription}
+                placeholder="Description"
                 onChange={(e) => setEditedDescription(e.target.value)}
                 className="form-input"
                 style={{ width: '100%' }}
