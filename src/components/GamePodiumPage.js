@@ -22,7 +22,7 @@ function GamePodiumPage() {
     // Fetch game podium from the backend
     const [podium, setPodium] = useState([]); // Initialize podium state with an empty object
     useEffect(() => {
-        sendAPIrequest(`${apiUrl}/games/${gameId}/podium/`, "GET", "Failed to fetch game podium", setLoading, {})
+        sendAPIrequest(`${apiUrl}games/${gameId}/podium/`, "GET", "Failed to fetch game podium", setLoading, {})
         .then((data) => {
             setPodium(data);
         })

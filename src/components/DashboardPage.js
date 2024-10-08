@@ -13,7 +13,7 @@ function DashboardPage() {
   const fetchGames = async () => {
     // try {
       const token = localStorage.getItem('token'); // Get the token from local storage
-      const response = await fetch(`${apiUrl}/games/`, {
+      const response = await fetch(`${apiUrl}games/`, {
         headers: {
           'Authorization': `Token ${token}`,  // Attach the token in the request headers
         },
@@ -28,7 +28,7 @@ function DashboardPage() {
   // Fetch user profile info
   const fetchUserProfile = async () => {
     const token = localStorage.getItem('token'); // Get the token from local storage
-    const response = await fetch(`${apiUrl}/user-profile/`, {
+    const response = await fetch(`${apiUrl}user-profile/`, {
       headers: {
         'Authorization': `Token ${token}`,  // Attach the token in the request headers
       },
@@ -54,7 +54,7 @@ function DashboardPage() {
         name: newGameName, // Game name
         default_rules: newGameDefaultRules, // Default rules
       };
-      const response = await fetch(`${apiUrl}/create_game/`, {
+      const response = await fetch(`${apiUrl}create_game/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ function DashboardPage() {
         setNewGameWindowShow(false);
 
         // Optionally, fetch games again to show the new game
-        const updatedGames = await fetch(`${apiUrl}/games/`, {
+        const updatedGames = await fetch(`${apiUrl}games/`, {
           headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`,  // Attach the token in the request headers
           },
@@ -91,7 +91,7 @@ function DashboardPage() {
 
     if (invitation_code) {
       // Call the backend API to join the game
-      const response = await fetch(`${apiUrl}/join_game/${invitation_code}/`, {
+      const response = await fetch(`${apiUrl}join_game/${invitation_code}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
