@@ -4,9 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import { toggleCard, renderPageHeader } from './shared';
+import { renderPage } from './shared';
+import { sendAPIrequest } from './shared';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GamePodiumPage() {
+    const [loading, setLoading] = useState(false); // Loading state
     const { gameId } = useParams(); // Get game ID from URL
     const navigate = useNavigate(); // Updated hook
     
@@ -18,7 +22,7 @@ function GamePodiumPage() {
     // Fetch game podium from the backend
     const [podium, setPodium] = useState([]); // Initialize podium state with an empty object
     useEffect(() => {
-        fetchGamePodium()
+        sendAPIrequest(`${apiUrl}games/${gameId}/podium/`, "GET", "Failed to fetch game podium", setLoading, {})
         .then((data) => {
             setPodium(data);
         })
@@ -26,22 +30,11 @@ function GamePodiumPage() {
             console.error('Error fetching game podium:', error);
         });
         }, [gameId]);
-    const fetchGamePodium = async () => {
-        // try {
-        const response = await fetch(`${apiUrl}games/${gameId}/podium/`, {
-            headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
-        });
-        const data = await response.json();
-        return data;
-        // } catch (error) {
-        //   throw new Error('Failed to fetch game rules');
-        // }
-    };
 
     // Render the podium list
     const renderPodium = () => {
         if (podium.length === 0) {
-            return <p>No podium found</p>;
+            return <p> </p>;
         }
         
         return podium.players.map((player, index) => {
@@ -75,19 +68,7 @@ function GamePodiumPage() {
     
     // Render the page
     return (
-        <div className="page-layout">
-            {/* Main Content */}
-            <div className="page-content">
-        
-                {/* Page header */}
-                {renderPageHeader("Dashboard", `/game/${gameId}`, handleNavigate)}
-
-                {/* Page title */}
-                <h1 className="page-content-title">Podium </h1>
-                {/* Players list */}
-                {renderPodium()}
-            </div>
-        </div>
+        renderPage("Podium", `/game/${gameId}`, "Dashboard", handleNavigate, renderPodium(), loading)        
     );
 }
 

@@ -119,20 +119,22 @@ export const renderLoadingMask = () => {
 export const sendAPIrequest = async (path, method, errorMsg, setLoading, data) => {
     setLoading(true); // Start loading before the request is sent
     let headers = { 'Authorization': `Token ${localStorage.getItem('token')}` };
-    if (method === 'POST') {
-        headers['Content-Type'] = 'application/json';
-    } else if (method === 'POST-NO-AUTH') {
+    if (method === 'POST-NO-AUTH') {
         method = 'POST';
-        headers = { 'Content-Type': 'application/json' };
+        headers = {}
     }
     // Send the API request and wait for the response
     let response;
+    let request = {
+        method: method,
+        headers: headers,
+    };
+    if (method === 'POST' || method === 'PUT') {
+        request.body = data ? data : null; // data ? JSON.stringify(data) : null,
+    }
+
     try {
-        response = await fetch(`${path}`, {
-            method: method,
-            headers: headers,
-            body: data ? JSON.stringify(data) : null,
-        });
+        response = await fetch(path, request);
     } catch (error) {
         setLoading(false); // Stop loading on error
         alert(`${errorMsg}: ${error}`);
@@ -156,12 +158,14 @@ export const sendAPIrequest = async (path, method, errorMsg, setLoading, data) =
     }
 }
 
-export const renderPage = (title, backPath, backPathTitle, handleNavigate, renderChildren) => {
+export const renderPage = (title, backPath, backPathTitle, handleNavigate, renderChildren, loading) => {
     return (
         <div className="page-layout">
             <div className="page-content">
                 {renderPageHeader(backPathTitle, backPath, handleNavigate)}
+                <h1 className="page-content-title">{title} </h1>
                 {renderChildren}
+                {loading && renderLoadingMask()} {/* Render loading mask */}
             </div>
         </div>
     );
@@ -176,7 +180,7 @@ export const renderExpandableCard = (cardTitle, renderChildren) => {
                     {cardTitle}
                 </span>
             </Card.Header>
-            <Card.Body id={`card-body-game-properties`} className="expandable-card-body">
+            <Card.Body id={`card-body-${uniqueIndex}`} className="expandable-card-body">
                 {renderChildren}
             </Card.Body>
         </Card>
@@ -184,4 +188,61 @@ export const renderExpandableCard = (cardTitle, renderChildren) => {
 }
 
 
+export const renderImageUpload = (image, handleImageChanged, setImage, path, setLoading) => {
+    return (
+        <div>
+            <img src={image} className="edit-settings-image" onError={(e) => e.target.src = 'https://via.placeholder.com/150'} />
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={(e) => handleImageChanged(e, setImage, path, setLoading)}
+            />
+            <button className="edit-settings-image-button" onClick={() => document.getElementById('imageInput').click()}>
+                <i className="fas fa-edit"></i>
+            </button>
+        </div>
+    );
+}
+
+
+export const handleImageChange = async (event, setImage, path, setLoading) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+
+    if (file) {
+        // Load image as base64
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            setImage(event.target.result);
+        };
+        reader.readAsDataURL(file);
+
+        reader.onloadend = async (event) => {
+            formData.append('image', reader.result);  // Append the file to the FormData
+            console.log('formData:', formData);
+            console.log('path:', path);
+            // try {
+            // const response = await fetch(path, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Authorization': `Token ${localStorage.getItem('token')}`,
+            //     },
+            //     body: formData,
+            // });
+            // console.log('Response:', response);
+            //     if (!response.ok) {
+            //         throw new Error('Failed to update game image');
+            //     }
+            // } catch (error) {
+            //     console.error('Error updating game image:', error);
+            // }
+            
+            
+            // console.log('formData:', formData);
+            sendAPIrequest(path, 'POST', 'Failed to update game image', setLoading, formData)
+        }
+    }
+};
 

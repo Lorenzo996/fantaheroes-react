@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { renderPageHeader } from './shared';
+import { renderPage } from './shared';
+import { sendAPIrequest } from './shared';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GameDashboardPage() {
+  const [loading, setLoading] = useState(false); // Loading state
   const { gameId } = useParams(); // Get game ID from URL
   const navigate = useNavigate(); // Updated hook
 
@@ -16,38 +20,26 @@ function GameDashboardPage() {
 
   // Handler for leaving the game
   const handleLeaveGame = async () => {
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch(`${apiUrl}games/${gameId}/leave/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`, // Send token in header
-            },
-        });
-        if (!response.ok) {
-            throw new Error('Failed to leave game');
-        }
-        // Redirect to the user dashboard after leaving the game
-        navigate('/dashboard');
-    } catch (error) {
-        console.error('Error leaving game:', error);
-    }
+    sendAPIrequest(`${apiUrl}games/${gameId}/leave/`, "POST", "Failed to leave game", setLoading, {})
+    // Redirect to the user dashboard after leaving the game
+    navigate('/dashboard');
 };
 
 // Fetch user role from the backend
   const [userRole, setUserRole] = useState('');
-  const fetch_user_role = async () => {
-    const response = await fetch(`${apiUrl}games/${gameId}/role/`, {
-      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+  useEffect(() => {
+    sendAPIrequest(`${apiUrl}games/${gameId}/role/`, "GET", "Failed to fetch user role", setLoading, {})
+    .then((data) => {
+      setUserRole(data);
+    })
+    .catch((error) => {
+        console.error('Error fetching user role:', error);
     });
-    if (!response.ok) {
-      console.error('Failed to fetch user role');
-      return;
-    }
-    setUserRole(await response.json());
-  }
-  fetch_user_role()
+    }, [gameId]);
+
+  
+  
+
   // Subpages for the game dashboard to navigate to
   let subpages = [
     { name: 'Game Rules', image: '/images/rules.png', path: 'rules' },
@@ -60,17 +52,10 @@ function GameDashboardPage() {
     subpages.push({ name: 'Settings', image: '/images/settings.png', path: 'settings' });
   }
 
-  return (
-    <div className="page-layout">
 
-      {/* Main Content */}
-      <div className="page-content">
-        {/* Page header */}
-        {renderPageHeader("Home", "/dashboard", handleNavigate)}
-
-        {/* Page Title */}
-        <h1 className="page-content-title">Game Dashboard </h1>
-        
+  const renderPageContent = () => {
+    return (
+      <>
         {/* Show Settings drop-down if the user is NOT an owner or admin */}
         {userRole !== 'owner' && userRole !== 'admin' && (
           <div className="dropdown">
@@ -100,20 +85,14 @@ function GameDashboardPage() {
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </>
+    )
+  };
+
+  return (
+    renderPage("Game Dashboard", `/dashboard`, "Home", handleNavigate, renderPageContent(), loading)
   );
 }
 
-// Reusable style for dashboard boxes
-const boxStyle = {
-  width: '150px',
-  padding: '10px',
-  backgroundColor: 'white',
-  borderRadius: '8px',
-  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-  textAlign: 'center',
-  cursor: 'pointer',
-};
 
 export default GameDashboardPage;

@@ -4,9 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import { toggleCard, renderPageHeader } from './shared';
+import { renderPage } from './shared';
+import { sendAPIrequest } from './shared';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GamePlayersPage() {
+    const [loading, setLoading] = useState(false); // Loading state
     const { gameId } = useParams(); // Get game ID from URL
     const navigate = useNavigate(); // Updated hook
     
@@ -18,7 +22,7 @@ function GamePlayersPage() {
     // Fetch game players from the backend
     const [players, setPlayers] = useState([]); // Initialize players state with an empty object
     useEffect(() => {
-        fetchGamePlayers()
+        sendAPIrequest(`${apiUrl}games/${gameId}/players/`, "GET", "Failed to fetch game players", setLoading, {})
         .then((data) => {
             setPlayers(data);
         })
@@ -26,22 +30,11 @@ function GamePlayersPage() {
             console.error('Error fetching game players:', error);
         });
         }, [gameId]);
-    const fetchGamePlayers = async () => {
-        // try {
-        const response = await fetch(`${apiUrl}games/${gameId}/players/`, {
-            headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
-        });
-        const data = await response.json();
-        return data;
-        // } catch (error) {
-        //   throw new Error('Failed to fetch game rules');
-        // }
-    };
 
     // Render the players list
     const renderPlayers = () => {
         if (players.length === 0) {
-            return <p>No players found</p>;
+            return <p> </p>;
         }
         // TODO: check if it is necessary to pass the player id (better keep it hidden in the frontend)
         return players.map((player) => {
@@ -67,19 +60,7 @@ function GamePlayersPage() {
     
     // Render the page
     return (
-        <div className="page-layout">
-            {/* Main Content */}
-            <div className="page-content">
-        
-                {/* Page header */}
-                {renderPageHeader("Dashboard", `/game/${gameId}`, handleNavigate)}
-
-                {/* Page title */}
-                <h1 className="page-content-title">Players</h1>
-                {/* Players list */}
-                {renderPlayers()}
-            </div>
-        </div>
+        renderPage("Players", `/game/${gameId}`, "Dashboard", handleNavigate, renderPlayers(), loading)        
     );
 }
 

@@ -6,10 +6,13 @@ import { Dropdown, ButtonGroup, Button, DropdownButton } from 'react-bootstrap';
 import { tab } from '@testing-library/user-event/dist/tab';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { toggleCard, renderPageHeader } from './shared';
+import { renderPage } from './shared';
+import { sendAPIrequest } from './shared';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GameRulesPage() {
+  const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate();
 
   // Get game ID from URL
@@ -33,8 +36,8 @@ function GameRulesPage() {
 
   // Fetch game rules from the backend
   useEffect(() => {
-    fetchGameRules()
-      .then((data) => {
+    sendAPIrequest(`${apiUrl}games/${gameId}/rules/`, "GET", "Failed to fetch game rules", setLoading, {})
+    .then((data) => {
         setChallenges(data["challenges"]);
         setBonus(data["bonus"]);
         setMalus(data["malus"]);
@@ -43,18 +46,6 @@ function GameRulesPage() {
         console.error('Error fetching game rules:', error);
       });
     }, [gameId]);
-  const fetchGameRules = async () => {
-    // try {
-      const response = await fetch(`${apiUrl}games/${gameId}/`, {
-        headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
-      });
-      const data = await response.json();
-      return data;
-    // } catch (error) {
-    //   throw new Error('Failed to fetch game rules');
-    // }
-  };
-
 
 
   // Function to render cards
@@ -71,12 +62,13 @@ function GameRulesPage() {
       }
       return (
         <Card key={uniqueIndex} className="expandable-card">
-          <Card.Header className="expandable-card-header" >
+          <Card.Header className="expandable-card-header">
             {/* Title that can toggle the card body */}
             {isEditing ? (
               <input
                 type="text"
                 value={editedTitle}
+                placeholder='Title'
                 onChange={(e) => setEditedTitle(e.target.value)}
                 className="form-input"
                 style={{ flexGrow: 1 }}
@@ -151,11 +143,12 @@ function GameRulesPage() {
   
           </Card.Header>
   
-          <Card.Body id={`card-body-${uniqueIndex}`} className="expandable-card-body">
+          <Card.Body id={`card-body-${uniqueIndex}`} className="expandable-card-body" style={isNew ? { display: 'block' } : {}}>
             {/* Description */}
             {isEditing ? (
               <textarea
                 value={editedDescription}
+                placeholder="Description"
                 onChange={(e) => setEditedDescription(e.target.value)}
                 className="form-input"
                 style={{ width: '100%' }}
@@ -373,18 +366,9 @@ function GameRulesPage() {
     navigate(path);
   };
 
-  return (
-    <div className="page-layout">
-      {/* Main Content */}
-      <div className="page-content">
-        
-        {/* Page header */}
-        {renderPageHeader("Dashboard", `/game/${gameId}`, handleNavigate)}
-
-        {/* Page title */}
-        <h1 className="page-content-title">Game Rules</h1>
-
-        {/* Tabs for Challenges, Bonus, and Malus */}
+  const renderPageContent = () => {
+    return (
+      <>
         <Tabs activeKey={activeTab} onSelect={(k) => setActiveTab(k)} id="game-rules-tabs">
           <Tab eventKey="challenges" title="Challenges" id="challenges-tab">
             {renderCards(challenges, 'challenges')}
@@ -399,8 +383,13 @@ function GameRulesPage() {
             {renderAddRuleButton('malus')}
           </Tab>
         </Tabs>
-      </div>
-    </div>
+      </>
+    );
+  };
+        
+
+  return (
+    renderPage("Game Rules", `/game/${gameId}`, "Dashboard", handleNavigate, renderPageContent(), loading)        
   );
 }
 

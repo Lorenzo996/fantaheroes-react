@@ -4,13 +4,14 @@ import { Accordion, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { renderPage, renderExpandableCard } from './shared';
+import { renderPage, renderExpandableCard, renderImageUpload, handleImageChange} from './shared';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GameSettingsPage_General() {
     const { gameId } = useParams(); // Get game ID from URL
     const navigate = useNavigate(); // Updated hook
+    const [loading, setLoading] = useState(false);
 
     const toggleCard = (uniqueIndex) => {
         const cardBody = document.getElementById(`card-body-${uniqueIndex}`);
@@ -144,6 +145,7 @@ function GameSettingsPage_General() {
     };
 
     // Handle image selection and upload
+    /*
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
         const formData = new FormData();
@@ -176,7 +178,7 @@ function GameSettingsPage_General() {
             }
         }
     };
-    
+    */
     const renderCardContent_GameProperties = () => {
         return (
             <>
@@ -192,19 +194,7 @@ function GameSettingsPage_General() {
                     />
                 </div>
                 <div className="form-label">Game Image</div>
-                <div>
-                    <img src={gameImage} className="edit-settings-image" onError={(e) => e.target.src = 'https://via.placeholder.com/150'} />
-                    <input
-                        type="file"
-                        id="imageInput"
-                        accept="image/*"
-                        style={{ display: 'none' }}
-                        onChange={handleImageChange}
-                    />
-                    <button className="edit-settings-image-button" onClick={() => document.getElementById('imageInput').click()}>
-                        <i className="fas fa-edit"></i>
-                    </button>
-                </div>
+                {renderImageUpload(gameImage, handleImageChange, setGameImage, `${apiUrl}games/${gameId}/edit-settings/image/`, setLoading)}
 
                 <div className="form-label">Invitation Code: <span className="text">{game.invitation_code}</span></div>
             </>

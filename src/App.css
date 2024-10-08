@@ -248,7 +248,7 @@
   color: rgb(223, 230, 230);
 }
 .form-input-transparent {
-  width: fill;
+  width: stretch;
   padding: 5px;
   margin: 0 0 0 0;
   border-radius: 5px;
