@@ -21,7 +21,7 @@ function GameEventsPage() {
     // Fetch game events from the backend
     const [events, setEvents] = useState([]); // Initialize players state with an empty object
     useEffect(() => {
-        sendAPIrequest(`${apiUrl}games/${gameId}/events/`, "GET", "Failed to fetch game events", setLoading, {})
+        sendAPIrequest(`${apiUrl}/games/${gameId}/events/`, "GET", "Failed to fetch game events", setLoading, {})
         .then((data) => {
             setEvents(data);
         })
@@ -42,7 +42,7 @@ function GameEventsPage() {
     // Handler for deleting an event
     const handleDelete = async (item) => {
         // try {
-            const response = await fetch(`${apiUrl}games/${gameId}/delete-event/${item.id}/`, {
+            const response = await fetch(`${apiUrl}/games/${gameId}/delete-event/${item.id}/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`,

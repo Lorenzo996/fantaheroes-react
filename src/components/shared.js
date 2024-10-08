@@ -15,7 +15,7 @@ export const toggleCard = (uniqueIndex) => {
 // Edit the game settings in the backend
 export const setEditedGameSettings = async (apiUrl, gameId, setGameSettings, value, key) => {
     // Send the updated value to the backend
-    fetch(`${apiUrl}games/${gameId}/edit-settings/${key}/`, {
+    fetch(`${apiUrl}/games/${gameId}/edit-settings/${key}/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export const setEditedGameSettings = async (apiUrl, gameId, setGameSettings, val
 
 export const fetchGameSettings = async (apiUrl, gameId) => {
     // try {
-        const response = await fetch(`${apiUrl}games/${gameId}/settings`, {
+        const response = await fetch(`${apiUrl}/games/${gameId}/settings`, {
             headers: {
               'Authorization': `Token ${localStorage.getItem('token')}`, // Send token in header
             },
