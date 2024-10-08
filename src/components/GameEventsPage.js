@@ -5,10 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Dropdown, ButtonGroup, Button, DropdownButton } from 'react-bootstrap';
 import { renderPageHeader } from './shared';
+import { renderPage } from './shared';
+import { sendAPIrequest } from './shared';
+import { toggleCard } from './shared';
+
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GameEventsPage() {
+    const [loading, setLoading] = useState(false); // Loading state
     const { gameId } = useParams(); // Get game ID from URL
     const [activeKey, setActiveKey] = useState('0'); // Active key for the accordion
     const navigate = useNavigate(); // Updated hook
@@ -16,7 +21,7 @@ function GameEventsPage() {
     // Fetch game events from the backend
     const [events, setEvents] = useState([]); // Initialize players state with an empty object
     useEffect(() => {
-        fetchGameEvents()
+        sendAPIrequest(`${apiUrl}/games/${gameId}/events/`, "GET", "Failed to fetch game events", setLoading, {})
         .then((data) => {
             setEvents(data);
         })
@@ -24,17 +29,6 @@ function GameEventsPage() {
             console.error('Error fetching game events:', error);
         });
         }, [gameId]); // TODO: is it necessary to include gameId in the dependencies?
-    const fetchGameEvents = async () => {
-        // try {
-        const response = await fetch(`${apiUrl}/games/${gameId}/events/`, {
-            headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
-        });
-        const data = await response.json();
-        return data;
-        // } catch (error) {
-        //   throw new Error('Failed to fetch game rules');
-        // }
-    };
     
     // Handlers for navigating to different sections
     const handleNavigate = (path) => {
@@ -68,7 +62,7 @@ function GameEventsPage() {
 
 
     // Render the events list
-    const renderPlayers = () => {
+    const renderEvents = () => {
         if (events.length === 0) {
             return <p>No events found</p>;
         }
@@ -118,36 +112,22 @@ function GameEventsPage() {
             );
           });
     }
-    // Function to expand or collapse the card body
-    const toggleCard = (uniqueIndex) => {
-        const cardBody = document.getElementById(`card-body-${uniqueIndex}`);
-        if (cardBody.style.display === 'none' || cardBody.style.display === '') {
-            cardBody.style.display = 'block';
-        } else {
-            cardBody.style.display = 'none';
-        }
-    };
     
+    const renderPageContent = () => {
+        return (
+          <>
+            {/* Add event button */}
+            <button className="top-right-add-button" onClick={() => handleNavigate(`/game/${gameId}/events/new`)}>
+                Add Event
+            </button>
+            {/* Events list */}
+            {renderEvents()}
+          </>
+        )
+      }
     // Render the page
     return (
-        <div className="page-layout">
-            {/* Main Content */}
-            <div className="page-content">
-        
-                {/* Page header */}
-                {renderPageHeader("Dashboard", `/game/${gameId}`, handleNavigate)}
-
-                {/* Page title */}
-                <h1 className="page-content-title">Events</h1>
-
-                {/* Add event button */}
-                <button className="top-right-add-button" onClick={() => handleNavigate(`/game/${gameId}/events/new`)}>
-                    Add Event
-                </button>
-                {/* Events list */}
-                {renderPlayers()}
-            </div>
-        </div>
+        renderPage("Events", `/game/${gameId}`, "Dashboard", handleNavigate, renderPageContent(), loading)
     );
 }
 
