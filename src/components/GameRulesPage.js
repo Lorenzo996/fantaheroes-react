@@ -167,7 +167,7 @@ function GameRulesPage() {
               ) : (
                 <p className="text">Points: {item.points}</p>
               )
-            ) : (tabName === 'bonus' && ((item.points > 0 && item.multiplier === 1) || (item.points === 0 && item.multiplier === 1)) ? (
+            ) : (tabName === 'bonus' && ((item.points > 0 && item.multiplier === 1) || (item.points === 0 && item.multiplier === 1) || isEditing) ? (
                 isEditing ? (
                   <div>
                     <span className="text">Points:</span>
@@ -176,7 +176,7 @@ function GameRulesPage() {
                 ) : (
                   <span className="text">Points: {item.points}</span>
                 )
-              ) : (tabName === 'malus' && ((item.points < 0 && item.divider === 1) || (item.points === 0 && item.divider === 1)) ? (
+              ) : (tabName === 'malus' && ((item.points < 0 && item.divider === 1) || (item.points === 0 && item.divider === 1) || isEditing) ? (
                   isEditing ? (
                     <div>
                       <span className="text">Points:</span>
@@ -248,6 +248,8 @@ function GameRulesPage() {
     setEditedTitle(item.title);
     setEditedDescription(item.description);
     setEditedPoints(item.points);
+    setEditedMultiplier(item.multiplier);
+    setEditedDivider(item.divider);
   };
 
   // Function for Save (edited rule) functionality
@@ -268,46 +270,32 @@ function GameRulesPage() {
       if (isNew === true) {
         url = `${apiUrl}/games/${gameId}/add-${type}/`; // Use a different URL for new rules
       }
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(updatedRule),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to save changes');
-      }
+      const data = await sendAPIrequest(url, "POST", "Failed to save changes", setLoading, JSON.stringify(updatedRule));
+
       if (isNew === true) {
-        const createdRule = await response.json();
-        ruleId = createdRule["data"]; // Get the new rule ID from the response
+        ruleId = data; // Get the new rule ID from the response
       }
       updatedRule['id'] = ruleId;
 
-      // After saving, update the state locally (TODO: fix and avoid full refresh)
-      // if (type === 'challenges') {
-      //   const updatedChallenges = [...challenges];
-      //   updatedChallenges[ruleIdx] = updatedRule;
-      //   setChallenges(updatedChallenges);
-      // } else if (type === 'bonus') {
-      //   const updatedBonus = [...bonus];
-      //   updatedBonus[ruleIdx] = updatedRule;
-      //   setBonus(updatedBonus);
-      // } else if (type === 'malus') {
-      //   const updatedMalus = [...malus];
-      //   updatedMalus[ruleIdx] = updatedRule;
-      //   setMalus(updatedMalus);
-      // }
-
+      // After saving, update the state locally
+      if (type === 'challenges') {
+        let updatedChallenges = [...challenges];
+        updatedChallenges[ruleIdx] = updatedRule;
+        setChallenges(updatedChallenges);
+      } else if (type === 'bonus') {
+        let updatedBonus = [...bonus];
+        updatedBonus[ruleIdx] = updatedRule;
+        setBonus(updatedBonus);
+      } else if (type === 'malus') {
+        let updatedMalus = [...malus];
+        updatedMalus[ruleIdx] = updatedRule;
+        setMalus(updatedMalus);
+      }
       
-      window.location.reload(); // Refresh the page to get the updated rules
+      // window.location.reload(); // Refresh the page to get the updated rules
 
       // Exit edit mode
       setEditMode(null);
-    // } catch (error) {
-    //   console.error('Error saving changes:', error);
-    // }
   };
   
   const handleCancelEdit = (ruleIdx, ruleId, type, isNew) => {
@@ -325,21 +313,11 @@ function GameRulesPage() {
 
   // Function for Delete functionality
   const handleDelete = async (item, type) => {
-    // try {
-      const response = await fetch(`${apiUrl}/games/${gameId}/delete-${type}/${item["id"]}/`, {
-        method: 'POST',
-        headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete rule');
-      }
+    await sendAPIrequest(`${apiUrl}/games/${gameId}/delete-${type}/${item["id"]}/`, "POST", "Failed to delete rule", setLoading, {})
 
-      // After deleting, update the state locally
-      const updatedChallenges = challenges.filter((challenge) => challenge.id !== item.id);
-      setChallenges(updatedChallenges);
-    // } catch (error) {
-    //   console.error('Error deleting rule:', error);
-    // }
+    // After deleting, update the state locally
+    const updatedChallenges = challenges.filter((challenge) => challenge.id !== item.id);
+    setChallenges(updatedChallenges);
   };
 
   // Function for Add Rule functionality
@@ -358,6 +336,11 @@ function GameRulesPage() {
     } else if (type === 'malus') {
       setMalus([...malus, newRule]);
     }
+    setEditedTitle('');
+    setEditedDescription('');
+    setEditedPoints(0);
+    setEditedMultiplier(1);
+    setEditedDivider(1);
   };
 
 
