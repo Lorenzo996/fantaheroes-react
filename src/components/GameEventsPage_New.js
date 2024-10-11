@@ -4,16 +4,20 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { renderPageHeader } from './shared';
+import { renderPage } from './shared';
+import { sendAPIrequest } from './shared';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function GameEventsPage_New() {
+    const [loading, setLoading] = useState(false); // Loading state
     const { gameId } = useParams(); // Get game ID from URL
     const navigate = useNavigate(); // Updated hook
 
     // Fetch game data from the backend
     const [game, setGame] = useState({});
     useEffect(() => {
-        fetchGameRules()
+        sendAPIrequest(`${apiUrl}/games/${gameId}/`, "GET", "Failed to fetch game", setLoading, {})
             .then((data) => {
                 setGame(data); // TODO: check if it possible to replace game with challenges
                 setBonuses(data.bonus);
@@ -22,18 +26,6 @@ function GameEventsPage_New() {
                 console.error('Error fetching game rules:', error);
             });
         }, [gameId]);
-    const fetchGameRules = async () => {
-    // try {
-        const response = await fetch(`${apiUrl}/games/${gameId}/`, {
-            headers: {'Authorization': `Token ${localStorage.getItem('token')}`},
-        });
-        const data = await response.json();
-        return data;
-    // } catch (error) {
-    //   throw new Error('Failed to fetch game rules');
-    // }
-    };
-
 
     // Form state
     const [selectedPlayer, setSelectedPlayer] = useState('');
@@ -52,7 +44,6 @@ function GameEventsPage_New() {
     const handleNavigate = (path) => {
         navigate(path);
     };
-
 
     // Handler for changing the selected challenge
     const handleChallengeChanged = async (e) => {
@@ -119,20 +110,8 @@ function GameEventsPage_New() {
             reader.readAsDataURL(await fetch(eventImage).then((r) => r.blob()))
         }
 
-        console.log(new_event);
         // Send the new event to the backend
-        const response = await fetch(`${apiUrl}/games/${gameId}/add-event/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`,
-            },
-            body: JSON.stringify(new_event),
-        });
-        if (!response.ok) {
-            console.error('Failed to add event');
-            return;
-        }
+        await sendAPIrequest(`${apiUrl}/games/${gameId}/add-event/`, "POST", "Failed to add event", setLoading, JSON.stringify(new_event))
 
         // Go back to the events page
         navigate(`/game/${gameId}/events/`);
@@ -208,7 +187,6 @@ function GameEventsPage_New() {
         // Compute points from bonuses multipliers and dividers
         let factor = 1;
         let extra_points = 0;
-        console.log(b);
         for (let i = 0; i < b.length; i++) {
             factor *= b[i].multiplier;
             extra_points += b[i].points;
@@ -219,22 +197,13 @@ function GameEventsPage_New() {
         }   
         p *= factor; // Apply the factor to the challenge points
         p += extra_points; // Add the extra points from bonuses and maluses
-        console.log(p, factor, extra_points);
         setPoints(p);
 
     }
     // Render the page
-    return (
-        <div className="page-layout">
-            {/* Main Content */}
-            <div className="page-content">
-        
-                {/* Page header */}
-                {renderPageHeader("Events", `/game/${gameId}/events`, handleNavigate)}
-
-                {/* Page title */}
-                <h1 className="page-content-title">New event</h1>
-
+    const renderPageContent = () => {
+        return (
+            <>
                 {/* Form to add a new event */}
                 <form>
                     {/* Players drop down */}
@@ -346,14 +315,18 @@ function GameEventsPage_New() {
                 <br />
                 
                 {/* Points */}
-                <p className="form-label">Points: <span className="text">{points}</span></p>
+                <p className="form-label">Points: <span className="text">{isNaN(points) ? '-' : points}</span></p>
 
                 {/* Add event button */}
                 <button className="add-button" onClick={handleAddEvent}>
                     Add Event
                 </button>
-            </div>
-        </div>
+            </>
+        );
+    }
+
+    return (
+        renderPage("New event", `/game/${gameId}/events`, "Events", handleNavigate, renderPageContent(), loading)        
     );
 }
 
