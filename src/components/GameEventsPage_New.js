@@ -17,7 +17,7 @@ function GameEventsPage_New() {
     // Fetch game data from the backend
     const [game, setGame] = useState({});
     useEffect(() => {
-        sendAPIrequest(`${apiUrl}games/${gameId}/`, "GET", "Failed to fetch game", setLoading, {})
+        sendAPIrequest(`${apiUrl}/games/${gameId}/`, "GET", "Failed to fetch game", setLoading, {})
             .then((data) => {
                 setGame(data); // TODO: check if it possible to replace game with challenges
                 setBonuses(data.bonus);
@@ -111,7 +111,7 @@ function GameEventsPage_New() {
         }
 
         // Send the new event to the backend
-        await sendAPIrequest(`${apiUrl}games/${gameId}/add-event/`, "POST", "Failed to add event", setLoading, JSON.stringify(new_event))
+        await sendAPIrequest(`${apiUrl}/games/${gameId}/add-event/`, "POST", "Failed to add event", setLoading, JSON.stringify(new_event))
 
         // Go back to the events page
         navigate(`/game/${gameId}/events/`);

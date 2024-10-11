@@ -22,7 +22,7 @@ function GamePlayersPage() {
     // Fetch game players from the backend
     const [players, setPlayers] = useState([]); // Initialize players state with an empty object
     useEffect(() => {
-        sendAPIrequest(`${apiUrl}games/${gameId}/players/`, "GET", "Failed to fetch game players", setLoading, {})
+        sendAPIrequest(`${apiUrl}/games/${gameId}/players/`, "GET", "Failed to fetch game players", setLoading, {})
         .then((data) => {
             setPlayers(data);
         })

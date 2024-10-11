@@ -20,7 +20,7 @@ function GameDashboardPage() {
 
   // Handler for leaving the game
   const handleLeaveGame = async () => {
-    sendAPIrequest(`${apiUrl}games/${gameId}/leave/`, "POST", "Failed to leave game", setLoading, {})
+    sendAPIrequest(`${apiUrl}/games/${gameId}/leave/`, "POST", "Failed to leave game", setLoading, {})
     // Redirect to the user dashboard after leaving the game
     navigate('/dashboard');
 };
@@ -28,7 +28,7 @@ function GameDashboardPage() {
 // Fetch user role from the backend
   const [userRole, setUserRole] = useState('');
   useEffect(() => {
-    sendAPIrequest(`${apiUrl}games/${gameId}/role/`, "GET", "Failed to fetch user role", setLoading, {})
+    sendAPIrequest(`${apiUrl}/games/${gameId}/role/`, "GET", "Failed to fetch user role", setLoading, {})
     .then((data) => {
       setUserRole(data);
     })
