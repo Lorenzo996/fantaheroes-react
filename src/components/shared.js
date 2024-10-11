@@ -131,6 +131,11 @@ export const sendAPIrequest = async (path, method, errorMsg, setLoading, data) =
     };
     if (method === 'POST' || method === 'PUT') {
         request.body = data ? data : null; // data ? JSON.stringify(data) : null,
+        console.log('request.headers:', request.headers);
+        if (data) {request.headers['Content-Type'] = 'application/json';}
+        console.log('request.headers:', request.headers);
+        console.log('request.body:', request.body);
+        console.log('request:', request);
     }
 
     try {

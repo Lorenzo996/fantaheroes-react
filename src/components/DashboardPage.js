@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Updated import
+import { renderPage } from './shared';
+import { sendAPIrequest } from './shared';
+import { renderLoadingMask } from './shared';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function DashboardPage() {
+  const [loading, setLoading] = useState(false); // Loading state
   const [games, setGames] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [username, setUsername] = useState(''); // State for storing user info
@@ -11,29 +15,14 @@ function DashboardPage() {
 
   // Fetch active games from the database
   const fetchGames = async () => {
-    // try {
-      const token = localStorage.getItem('token'); // Get the token from local storage
-      const response = await fetch(`${apiUrl}games/`, {
-        headers: {
-          'Authorization': `Token ${token}`,  // Attach the token in the request headers
-        },
-      });
-      const data = await response.json();
-      setGames(data);
-    // } catch (error) {
-    //   console.error('Error:', error);
-    // }
+    const data = await sendAPIrequest(`${apiUrl}games/`, "GET", "Failed to fetch games", setLoading, {})
+    console.log(data);
+    setGames(data);
   };
 
   // Fetch user profile info
   const fetchUserProfile = async () => {
-    const token = localStorage.getItem('token'); // Get the token from local storage
-    const response = await fetch(`${apiUrl}user-profile/`, {
-      headers: {
-        'Authorization': `Token ${token}`,  // Attach the token in the request headers
-      },
-    });
-    const userProfile = await response.json();
+    const userProfile = await sendAPIrequest(`${apiUrl}user-profile/`, "GET", "Failed to fetch user profile", setLoading, {})
     setUsername(userProfile.username); // Store user data
     setProfileImage(userProfile.profile_image); // Store user data
   };
@@ -248,6 +237,8 @@ function DashboardPage() {
           <button onClick={handleNewGame}>Create Game</button>
         </div>
       </div>
+
+      {loading && renderLoadingMask()} {/* Render loading mask */}
 
     </div>
   );
