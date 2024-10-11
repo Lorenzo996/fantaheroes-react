@@ -36,7 +36,7 @@ function GameRulesPage() {
 
   // Fetch game rules from the backend
   useEffect(() => {
-    sendAPIrequest(`${apiUrl}/games/${gameId}/rules/`, "GET", "Failed to fetch game rules", setLoading, {})
+    sendAPIrequest(`${apiUrl}games/${gameId}/rules/`, "GET", "Failed to fetch game rules", setLoading, {})
     .then((data) => {
         setChallenges(data["challenges"]);
         setBonus(data["bonus"]);
@@ -266,9 +266,9 @@ function GameRulesPage() {
         updatedRule["divider"] = editedDivider;
       }
 
-      let url = `${apiUrl}/games/${gameId}/edit-${type}/${ruleId}/`;
+      let url = `${apiUrl}games/${gameId}/edit-${type}/${ruleId}/`;
       if (isNew === true) {
-        url = `${apiUrl}/games/${gameId}/add-${type}/`; // Use a different URL for new rules
+        url = `${apiUrl}games/${gameId}/add-${type}/`; // Use a different URL for new rules
       }
       const data = await sendAPIrequest(url, "POST", "Failed to save changes", setLoading, JSON.stringify(updatedRule));
 
@@ -313,7 +313,7 @@ function GameRulesPage() {
 
   // Function for Delete functionality
   const handleDelete = async (item, type) => {
-    await sendAPIrequest(`${apiUrl}/games/${gameId}/delete-${type}/${item["id"]}/`, "POST", "Failed to delete rule", setLoading, {})
+    await sendAPIrequest(`${apiUrl}games/${gameId}/delete-${type}/${item["id"]}/`, "POST", "Failed to delete rule", setLoading, {})
 
     // After deleting, update the state locally
     const updatedChallenges = challenges.filter((challenge) => challenge.id !== item.id);
